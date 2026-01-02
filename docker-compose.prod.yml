@@ -1,0 +1,36 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+      args:
+        VITE_BACKEND_URL: https://api.yourdomain.com/api
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - ENVIRONMENT=production
+      - UCO_API_URL=https://ucoapi.neutralfuels.net
+      - FRONTEND_URL=https://yourdomain.com
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:

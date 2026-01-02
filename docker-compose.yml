@@ -1,0 +1,42 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+      args:
+        VITE_BACKEND_URL: http://localhost:3000/api
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - ENVIRONMENT=production
+      - UCO_API_TEST_URL=https://nf-test-ucoapi.neutralfuels.net
+      - UCO_API_PROD_URL=https://ucoapi.neutralfuels.net
+      - FRONTEND_URL=http://localhost:5173
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - LOG_LEVEL=debug
+    depends_on:
+      - redis
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/logs:/app/logs
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
