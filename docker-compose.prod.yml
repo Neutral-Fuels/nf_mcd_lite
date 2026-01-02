@@ -4,10 +4,17 @@ services:
       context: .
       dockerfile: docker/frontend.Dockerfile
       args:
-        VITE_BACKEND_URL: https://api.yourdomain.com/api
+        VITE_BACKEND_URL: https://api.mcollect.neutralfuels.net/api
     ports:
-      - "80:80"
+      - "5173:80"
+    depends_on:
+      - backend
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
   backend:
     build:
@@ -18,17 +25,31 @@ services:
     environment:
       - NODE_ENV=production
       - ENVIRONMENT=production
-      - UCO_API_URL=https://ucoapi.neutralfuels.net
-      - FRONTEND_URL=https://yourdomain.com
+      - UCO_API_TEST_URL=https://nf-test-ucoapi.neutralfuels.net
+      - UCO_API_PROD_URL=https://ucoapi.neutralfuels.net
+      - FRONTEND_URL=https://mCollect.neutralfuels.net
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-    restart: unless-stopped
+      - LOG_LEVEL=info
     depends_on:
       - redis
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    volumes:
+      - ./backend/logs:/app/logs
 
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "2"
     volumes:
       - redis-data:/data
 

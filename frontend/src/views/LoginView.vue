@@ -13,20 +13,6 @@
         <p class="text-sm text-gray-500 mt-2">Neutral Fuels Driver Portal</p>
       </div>
 
-      <!-- Environment Indicator -->
-      <div class="mb-6 text-center">
-        <span
-          :class="[
-            'inline-block px-4 py-1 rounded-full text-xs font-semibold',
-            authStore.environment === 'test'
-              ? 'bg-red-100 text-red-700'
-              : 'bg-green-100 text-green-700'
-          ]"
-        >
-          {{ authStore.environment === 'test' ? 'TEST ENVIRONMENT' : 'PRODUCTION' }}
-        </span>
-      </div>
-
       <!-- Error Alert -->
       <div v-if="error" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
         <p class="text-sm text-red-700">{{ error }}</p>
