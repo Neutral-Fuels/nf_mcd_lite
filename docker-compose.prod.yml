@@ -27,7 +27,7 @@ services:
       - ENVIRONMENT=production
       - UCO_API_TEST_URL=https://nf-test-ucoapi.neutralfuels.net
       - UCO_API_PROD_URL=https://ucoapi.neutralfuels.net
-      - FRONTEND_URL=https://mCollect.neutralfuels.net
+      - FRONTEND_URL=https://mcollect.neutralfuels.net
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - LOG_LEVEL=info
